@@ -10,6 +10,7 @@ import {
 import { ModalComponent } from './modal.component';
 import { Modal } from './modal';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { AlertComponent } from './alert/alert.component';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,12 @@ export class ModalService {
     confirm(data: any) {
       return this.open(ConfirmComponent, Object.assign(this.modalData, data));
     }
+    
+    alert(data: any) {
+      return this.open(AlertComponent, Object.assign(this.modalData, data));
+    }
 
-    open(component: Type<Modal>, data: any): Promise<string> {
+    private open(component: Type<Modal>, data: any): Promise<string> {
       if (this.modalRef)
         return;
   
@@ -63,7 +68,7 @@ export class ModalService {
     }
   
   
-    close(): void {
+    private close(): void {
       this.appRef.detachView(this.elementRef.hostView);
       this.elementRef.destroy();
       this.elementRef = null;

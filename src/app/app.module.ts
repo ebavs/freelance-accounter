@@ -5,17 +5,19 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EntryFormComponent } from './components/entry-form/entry-form.component';
-import { ShowComponent } from './components/show/show.component';
+import { ListComponent } from './components/list/list.component';
 import { ModalComponent } from './services/modal/modal.component';
 import { ConfirmComponent } from './services/modal/confirm/confirm.component';
+import { AlertComponent } from './services/modal/alert/alert.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EntryFormComponent,
-    ShowComponent,
+    ListComponent,
     ModalComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
