@@ -1,0 +1,110 @@
+<div class="box">
+    <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+      <label class="label">Cliente</label>
+      <div class="field is-grouped cliente-text" *ngIf="!isSelectVisible">
+        <div class="control is-expanded">
+          <input class="input" type="text" placeholder="Nombre Cliente" formControlName="fCliente">
+        </div>
+        <div class="control">
+          <a class="button is-link" (click)="changeCliente()">
+            <span class="icon">
+              <i class="fas fa-undo-alt"></i>
+            </span>
+          </a>
+        </div>
+        <p *ngIf="submitted && entryForm.controls.fCliente.errors" class="help is-danger">Campo obligatorio</p>
+      </div>
+      
+      <div class="field is-grouped cliente-select" *ngIf="isSelectVisible">
+        <div class="control">
+          <div class="select">
+            <select formControlName="fClientes">
+              <option value="none"></option>
+              <option *ngFor="let c of clientes; let i = index" [value]="i">{{c.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="control">
+          <a class="button is-link" (click)="changeCliente()">
+            <span class="icon">
+              <i class="fas fa-plus"></i>
+            </span>
+          </a>
+        </div>
+        <p *ngIf="submitted && entryForm.controls.fClientes.errors" class="help is-danger">Campo obligatorio</p>
+      </div>
+
+      <div class="field factura">
+        <label class="label">Factura No</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="001-2010" formControlName="fNumero">
+        </div>
+        <p *ngIf="submitted && entryForm.controls.fNumero.errors" class="help is-danger">Campo obligatorio</p>
+      </div>
+
+      <div class="field fecha">
+        <label class="label">Fecha Factura</label>
+        <div class="control">
+          <input class="input" type="date" placeholder="dd/MM/yyyy" formControlName="fFecha">
+        </div>
+        <p *ngIf="submitted && entryForm.controls.fFecha.errors" class="help is-danger">Campo obligatorio</p>
+      </div>
+
+      <div class="field importe">
+        <label class="label">Importe Neto (Sin IVA)</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Importe Factura" formControlName="fImporte">
+        </div>
+        <p *ngIf="submitted && entryForm.controls.fImporte.errors" class="help is-danger">Campo obligatorio</p>
+      </div>
+
+      <div class="field vencimiento">
+        <label class="label">Vencimiento (dias)</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="30 | 60 | 90 dias" formControlName="fVencimiento">
+        </div>
+        <p *ngIf="submitted && entryForm.controls.fVencimiento.errors" class="help is-danger">Campo obligatorio</p>
+      </div>
+
+      <div class="field iva">
+        <label class="label">Iva</label>
+        <div class="control">
+          <div class="select">
+            <select formControlName="fIva">
+              <option *ngFor="let iva of ivas;" [value]="iva">{{iva}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Notas</label>
+        <textarea class="textarea" rows="5" formControlName="fNotas"></textarea>
+      </div>
+
+      <div class="field por">
+        <label class="label">Facturado Por</label>
+        <div class="control">
+          <div class="select">
+            <select formControlName="fPor">
+              <option *ngFor="let w of workers; let i = index;" [value]="i">{{w.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field para">
+        <label class="label">Facturado Para</label>
+        <div class="control">
+          <div class="select">
+            <select formControlName="fPara">
+              <option *ngFor="let w of workers; let i = index;" [value]="i">{{w.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="control">
+        <button class="button is-primary">Enviar</button>
+      </div>
+    </form>
+</div>

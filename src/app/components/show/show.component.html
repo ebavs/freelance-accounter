@@ -1,0 +1,49 @@
+
+<div class="columns">
+  <div class="column is-4 is-offset-8 has-text-right">
+    <a class="button is-primary" routerLink="/entry/new">Nueva Entrada</a>
+  </div>
+</div>
+<div class="columns">
+  <div class="column is-full">
+    <table class="table is-hoverable is-fullwidth">
+      <thead>
+        <th>Factura No</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Base</th>
+        <th>IVA</th>
+        <th>Importe IVA</th>
+        <th>Importe IRPF</th>
+        <th>Total Factura</th>
+        <th></th>
+      </thead>
+      <tfoot>
+        <th>Factura No</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Base</th>
+        <th>IVA</th>
+        <th>Importe IVA</th>
+        <th>Importe IRPF</th>
+        <th>Total Factura</th>
+        <th></th>
+      </tfoot>
+      <tr *ngFor="let f of facturas; let i = index;">
+        <td>{{f.numero}}</td>
+        <td>{{f.cliente ? f.cliente.name : ''}}</td>
+        <td>{{f.fecha}}</td>
+        <td>{{f.importe}}€</td>
+        <td>{{f.iva}}%</td>
+        <td>{{f.importeIVA}}€</td>
+        <td>{{f.importeIRPF}}€</td>
+        <td>{{f.importeFactura}}€</td>
+        <td class="has-text-right">
+          <a class="button is-danger is-small" (click)="confirmModal()">
+            <i class="fas fa-times"></i>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
