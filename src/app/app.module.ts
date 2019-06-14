@@ -9,6 +9,9 @@ import { ListComponent } from './components/list/list.component';
 import { ModalComponent } from './services/modal/modal.component';
 import { ConfirmComponent } from './services/modal/confirm/confirm.component';
 import { AlertComponent } from './services/modal/alert/alert.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { UploadComponent } from './components/upload/upload.component';
+import { ExpensesFormComponent } from './components/expenses-form/expenses-form.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { AlertComponent } from './services/modal/alert/alert.component';
     ListComponent,
     ModalComponent,
     ConfirmComponent,
-    AlertComponent
+    AlertComponent,
+    MenuComponent,
+    UploadComponent,
+    ExpensesFormComponent
   ],
   imports: [
     BrowserModule,

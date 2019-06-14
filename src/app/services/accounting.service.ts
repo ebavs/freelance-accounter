@@ -11,16 +11,8 @@ export class AccountingService {
   clientes: Cliente[] = [];
 
   constructor() { 
-    const data = store.get('accountingData');
-    if (data) {
-      if (data.facturas) {
-        this.facturas = data.facturas;
-      }
-      
-      if (data.clientes) {
-        this.clientes = data.clientes;
-      }
-    }
+    const data = this.readStore();
+    this.setAllData(data);
   }
 
   addFactura(factura : Factura) {
@@ -78,5 +70,23 @@ export class AccountingService {
             facturas: this.facturas,
             clientes: this.clientes,
           });
+  }
+
+  readStore(): any {
+    return store.get('accountingData');
+  }
+
+  setAllData(data) {
+    if (data) {
+      if (data.facturas) {
+        this.facturas = data.facturas;
+      }
+      
+      if (data.clientes) {
+        this.clientes = data.clientes;
+      }
+
+      this.persist();
+    }
   }
 }
