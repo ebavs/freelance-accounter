@@ -17,6 +17,7 @@ export class EntryFormComponent implements OnInit {
   
   entryForm: FormGroup;
   submitted: Boolean = false;
+  intChecked: Boolean = false;
   clientes: Cliente[];
   isSelectVisible: Boolean = true;
   ivas: any;
@@ -27,13 +28,11 @@ export class EntryFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router
   ) {
-    
+    this.ivas = ivas.reverse();
+    this.workers = Workers;
   }
 
   ngOnInit() {
-    this.ivas = ivas.reverse();
-    this.workers = Workers;
-
     this.entryForm = this.formBuilder.group({
       fClientes: [''],
       fCliente: [''],
@@ -44,7 +43,8 @@ export class EntryFormComponent implements OnInit {
       fIva: [this.ivas[0]],
       fNotas: [''],
       fPor: [0],
-      fPara: ['']
+      fPara: [''],
+      fInternacional: [false]
     });
 
     this.clientes = this.accountService.clientes;
@@ -73,10 +73,20 @@ export class EntryFormComponent implements OnInit {
       iva: this.entryForm.value.fIva,
       notas: this.entryForm.value.fNotas,
       importeIRPF: this.entryForm.value.fIva !== true ? (this.entryForm.value.fImporte * 15) / 100 : 0,
-      importeIVA: this.entryForm.value.fIva !== true ? (this.entryForm.value.fImporte * 21) / 100 : 0,
+      importeIVA: this.entryForm.value.fIva > 0 ? (this.entryForm.value.fImporte * this.entryForm.value.fIva) / 100 : 0,
       importeFactura: 0,
       facturadoPor: this.workers[this.entryForm.value.fPor],
-      facturadoPara: this.entryForm.value.fPara === "" ? this.workers[this.entryForm.value.fPor] : this.workers[this.entryForm.value.fPara]
+      facturadoPara: this.entryForm.value.fPara === "" ? this.workers[this.entryForm.value.fPor] : this.workers[this.entryForm.value.fPara],
+      internacional: this.entryForm.value.fInternacional,
+    }
+
+    if (this.entryForm.value.fInternacional) {
+      f.importeIRPF = 0;
+      f.importeIVA = 0;
+      f.iva = 0;  
+    } else {
+      f.importeIRPF = Math.round(f.importeIRPF * 100) / 100;
+      f.importeIVA = Math.round(f.importeIVA * 100) / 100;
     }
     f.importeFactura = f.importe - f.importeIRPF + f.importeIVA;
 
@@ -99,5 +109,16 @@ export class EntryFormComponent implements OnInit {
     }
 
     return cliente;
+  }
+
+  changeIntCheck() {
+    this.intChecked = !this.intChecked;
+
+    if (this.intChecked === true) {
+      this.entryForm.controls['fIva'].disable();
+      this.entryForm.controls['fIva'].setValue(0);
+    } else {
+      this.entryForm.controls['fIva'].enable();
+    }
   }
 }

@@ -1,3 +1,89 @@
-<p>
-  expenses-form works!
-</p>
+<div class="box">
+  <form [formGroup]="expensesForm" (ngSubmit)="onSubmit()">
+    <label class="label">Cliente</label>
+    <div class="field is-grouped cliente-select">
+      <div class="control">
+        <div class="select">
+          <select formControlName="gClientes">
+            <option value="none"></option>
+            <option *ngFor="let c of clientes; let i = index" [value]="i">{{c.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field concepto">
+      <label class="label">Concepto</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="" formControlName="gConcepto">
+      </div>
+      <p *ngIf="submitted && expensesForm.controls.gConcepto.errors" class="help is-danger">Campo obligatorio</p>
+    </div>
+
+    <div class="field factura">
+      <label class="label">Factura No</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="" formControlName="gNumero">
+      </div>
+    </div>
+
+    <div class="field fecha">
+      <label class="label">Fecha Factura</label>
+      <div class="control">
+        <input class="input" type="date" placeholder="dd/MM/yyyy" formControlName="gFecha">
+      </div>
+      <p *ngIf="submitted && expensesForm.controls.gFecha.errors" class="help is-danger">Campo obligatorio</p>
+    </div>
+
+    <div class="field importe">
+      <label class="label">Importe Neto (Sin IVA)</label>
+      <div class="control">
+        <input class="input" type="text" placeholder="Importe Factura" formControlName="gImporte">
+      </div>
+      <p *ngIf="submitted && expensesForm.controls.gImporte.errors" class="help is-danger">Campo obligatorio</p>
+    </div>
+
+    <div class="field iva">
+      <label class="label">Iva</label>
+      <div class="control">
+        <div class="select">
+          <select formControlName="gIva">
+            <option *ngFor="let iva of ivas;" [value]="iva">{{iva}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Notas</label>
+      <textarea class="textarea" rows="5" formControlName="gNotas"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="checkbox">
+        <input type="checkbox" formControlName="gRecurrente">
+        Recurrente
+      </label>
+
+      <label class="label">Hasta:</label>
+      <div class="control">
+        <input class="input" type="date" placeholder="dd/MM/yyyy" formControlName="gRecurrenteHasta">
+      </div>
+    </div>
+
+    <div class="field para">
+      <label class="label">Gasto Para</label>
+      <div class="control">
+        <div class="select">
+          <select formControlName="gPara">
+            <option *ngFor="let w of workers; let i = index;" [value]="i">{{w.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="control">
+      <button class="button is-primary">Enviar</button>
+    </div>
+  </form>
+</div>

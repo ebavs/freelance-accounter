@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Factura } from '../types/factura';
 import store from 'store';
 import { Cliente } from '../types/cliente';
+import { Gasto } from '../types/gasto';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ import { Cliente } from '../types/cliente';
 export class AccountingService {
   facturas: Factura[] = [];
   clientes: Cliente[] = [];
+  gastos: Gasto[] = [];
+  groups: any;
 
   constructor() { 
     const data = this.readStore();
@@ -25,7 +28,17 @@ export class AccountingService {
   }
 
   getFacturas(): Factura[] {
-    return this.facturas;
+    return this.facturas.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+  }
+
+  getFacturasGrouped(NumberOfMonths, NumberGroup, year): Factura[] {
+    const firstMonth = ((NumberOfMonths * NumberGroup) - NumberOfMonths) + 1;
+    const lastMonth = firstMonth + NumberOfMonths - 1;
+    
+    return this.getFacturas().filter((f) => {
+      const fecha = new Date(f.fecha);
+      return fecha.getFullYear() === year && fecha.getMonth() >= firstMonth-1 && fecha.getMonth() <= lastMonth;
+    });
   }
 
   getFactura(id): Factura {
@@ -35,6 +48,29 @@ export class AccountingService {
   removeFactura(id) {
     const index = this.facturas.findIndex(f => f.id === id);
     this.facturas.splice(index, 1);
+    this.persist();
+  }
+  
+  addGasto(gasto : Gasto) {
+    if (gasto.id === null) {
+      gasto.id = this.calculateId(this.gastos);
+    }
+
+    this.gastos.push(gasto);
+    this.persist();
+  }
+
+  getGastos(): Gasto[] {
+    return this.gastos;
+  }
+
+  getGasto(id): Gasto {
+    return this.gastos.find(g => g.id === id);
+  }
+
+  removeGasto(id) {
+    const index = this.gastos.findIndex(g => g.id === id);
+    this.gastos.splice(index, 1);
     this.persist();
   }
 
@@ -69,6 +105,7 @@ export class AccountingService {
           {
             facturas: this.facturas,
             clientes: this.clientes,
+            gastos: this.gastos,
           });
   }
 
@@ -85,8 +122,41 @@ export class AccountingService {
       if (data.clientes) {
         this.clientes = data.clientes;
       }
+      
+      if (data.gastos) {
+        this.gastos = data.gastos;
+      }
 
       this.persist();
     }
+  }
+
+  calculateGroups() {
+    const data = [...this.facturas, ...this.gastos].sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+    const minDate = new Date(data[0].fecha);
+    const maxDate = new Date(data[data.length-1].fecha);
+    const quarters = ['Enero/Febrero/Marzo', 'Abril/Mayo/Junio', 'Julio/Agosto/Sepiembre', 'Octubre/Noviembre/Diciembre'];
+    const options = [];
+
+    for (let pastYear = minDate.getFullYear(); pastYear < maxDate.getFullYear(); pastYear++) {
+      quarters.forEach((q,index) => {
+        const yes = data.find(e => parseInt((new Date(e.fecha).getMonth() / 3).toString()) === index && new Date(e.fecha).getFullYear() === pastYear);
+        if(yes) {
+          options.push({
+            text: q + ' ' + pastYear,
+            quarter: index+1,
+            year: pastYear
+          });
+        }
+      });
+    }
+
+    quarters.slice(0, parseInt((maxDate.getMonth() / 3 + 1).toString())).forEach((q, index) => options.push({
+      text: q + ' ' + maxDate.getFullYear(),
+      quarter: index+1,
+      year: maxDate.getFullYear()
+    }));
+    
+    return options;
   }
 }
