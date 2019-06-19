@@ -1,19 +1,25 @@
 
 <div class="columns">
-  <div class="column is-4 buttons">
-    <a class="button is-small" (click)="quarterChange(-1)" [class.is-hidden]="quarterIndex === 0"	>
+  <div class="column is-3 buttons" [class.is-invisible]="viewSelected === 0">
+    <a class="button is-small" (click)="quarterChange(-1)" [class.is-hidden]="periodIndex === 0"	>
       <span class="icon is-small">
         <i class="fas fa-caret-left"></i>
       </span>
     </a>
-    <span class="has-text-weight-bold">{{quarterActual.text}}</span>&nbsp;
-    <a class="button is-small" (click)="quarterChange(1)" [class.is-hidden]="quarterIndex === quarters.length - 1">
+    <span class="has-text-weight-bold">{{periodActual.text}}</span>&nbsp;
+    <a class="button is-small" (click)="quarterChange(1)" [class.is-hidden]="periodIndex === periods.length - 1">
       <span class="icon is-small">
         <i class="fas fa-caret-right"></i>
       </span>
     </a>
   </div>
-  <div class="column is-4 is-offset-4 has-text-right buttons">
+  <div class="column is-4 buttons has-addons">
+    <a class="button" (click)="viewChange(1)" [class.is-info]="viewSelected === 1">Mes</a>
+    <a class="button" (click)="viewChange(3)" [class.is-info]="viewSelected === 3">Trimestre</a>
+    <a class="button" (click)="viewChange(12)" [class.is-info]="viewSelected === 12">Año</a>
+    <a class="button" (click)="viewChange(0)" [class.is-info]="viewSelected === 0">Todo</a>
+  </div>
+  <div class="column is-5 has-text-right buttons">
     <a class="button is-primary" routerLink="/entry/new">Nueva Entrada</a>
     <a class="button is-primary" routerLink="/expense/new">Nuevo Gasto</a>
   </div>
@@ -24,6 +30,7 @@
       <thead>
         <th>Factura No</th>
         <th>Cliente</th>
+        <th>Concepto</th>
         <th>Fecha</th>
         <th>Base</th>
         <th>IVA</th>
@@ -32,8 +39,9 @@
         <th>Total Factura</th>
         <th></th>
       </thead>
-      <tr *ngFor="let g of gastos; let i = index;">
+      <tr *ngFor="let g of gastos; let i = index;" class="is-gasto">
         <td>{{g.numero}}</td>
+        <td></td>
         <td>{{g.concepto}}</td>
         <td>{{g.fecha}}</td>
         <td>{{g.importe}}€</td>
@@ -50,6 +58,7 @@
       <tr *ngFor="let f of facturas; let i = index;">
         <td>{{f.numero}}</td>
         <td>{{f.cliente ? f.cliente.name : ''}}</td>
+        <td>{{f.concepto}}</td>
         <td>{{f.fecha}}</td>
         <td>{{f.importe}}€</td>
         <td>{{f.iva}}%</td>
@@ -63,12 +72,30 @@
         </td>
       </tr>
       <tr>
-        <th colspan="3"></th>
-        <th>{{totales.base}}€</th>
+        <th colspan="4" class="has-text-right">Facturacion</th>
+        <th>{{totales.fBase}}€</th>
         <th></th>
-        <th>{{totales.iva}}€</th>
-        <th>{{totales.irpf}}€</th>
-        <th>{{totales.total}}€</th>
+        <th>{{totales.fIva}}€</th>
+        <th>{{totales.fIrpf}}€</th>
+        <th>{{totales.fTotal}}€</th>
+        <th></th>
+      </tr>
+      <tr class="is-gasto">
+        <th colspan="4" class="has-text-right">Gasto</th>
+        <th>{{totales.gBase}}€</th>
+        <th></th>
+        <th>{{totales.gIva}}€</th>
+        <th></th>
+        <th>{{totales.gTotal}}€</th>
+        <th></th>
+      </tr>
+      <tr class="">
+        <th colspan="4" class="has-text-right">Total</th>
+        <th>{{totales.tBase}}€</th>
+        <th></th>
+        <th>{{totales.tIva}}€</th>
+        <th>{{totales.tIrpf}}€</th>
+        <th>{{totales.tTotal}}€</th>
         <th></th>
       </tr>
     </table>

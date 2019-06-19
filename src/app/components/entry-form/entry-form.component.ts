@@ -37,6 +37,7 @@ export class EntryFormComponent implements OnInit {
       fClientes: [''],
       fCliente: [''],
       fNumero: ['', Validators.required],
+      fConcepto: ['', Validators.required],
       fFecha: ['', Validators.required],
       fImporte: ['', Validators.required],
       fVencimiento: [0, Validators.required],
@@ -47,7 +48,7 @@ export class EntryFormComponent implements OnInit {
       fInternacional: [false]
     });
 
-    this.clientes = this.accountService.clientes;
+    this.clientes = this.accountService.getClientes();
     this.isSelectVisible = this.clientes.length > 0;
   }
 
@@ -67,6 +68,7 @@ export class EntryFormComponent implements OnInit {
       id: null,
       cliente: cliente,
       numero: this.entryForm.value.fNumero,
+      concepto: this.entryForm.value.fConcepto,
       fecha: this.entryForm.value.fFecha,
       importe: this.entryForm.value.fImporte,
       vencimiento: this.entryForm.value.fVencimiento,

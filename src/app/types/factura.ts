@@ -4,6 +4,7 @@ import { Worker } from './worker';
 export class Factura {
     id: number;
     cliente: Cliente;
+    concepto: string;
     numero: string;
     fecha: Date;
     importe: number;

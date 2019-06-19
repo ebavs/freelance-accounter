@@ -37,7 +37,7 @@ export class AccountingService {
     
     return this.getFacturas().filter((f) => {
       const fecha = new Date(f.fecha);
-      return fecha.getFullYear() === year && fecha.getMonth() >= firstMonth-1 && fecha.getMonth() <= lastMonth;
+      return fecha.getFullYear() === year && fecha.getMonth() >= firstMonth-1 && fecha.getMonth() < lastMonth;
     });
   }
 
@@ -64,6 +64,17 @@ export class AccountingService {
     return this.gastos;
   }
 
+  getGastosGrouped(NumberOfMonths, NumberGroup, year): Gasto[] {
+    const firstMonth = ((NumberOfMonths * NumberGroup) - NumberOfMonths) + 1;
+    const lastMonth = firstMonth + NumberOfMonths - 1;
+    
+    return this.getGastos().filter((f) => {
+      const fecha = new Date(f.fecha);
+      return fecha.getFullYear() === year && fecha.getMonth() >= firstMonth-1 && fecha.getMonth() < lastMonth;
+    });
+  }
+
+
   getGasto(id): Gasto {
     return this.gastos.find(g => g.id === id);
   }
@@ -85,6 +96,12 @@ export class AccountingService {
   
   getCliente(id): Cliente {
     return this.clientes.find(c => c.id === id);
+  }
+
+  getClientes(): Cliente[] {
+    return this.clientes.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
   }
 
   removeCliente(id) {
@@ -131,16 +148,32 @@ export class AccountingService {
     }
   }
 
-  calculateGroups() {
+  calculateGroups(offset) {
     const data = [...this.facturas, ...this.gastos].sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
     const minDate = new Date(data[0].fecha);
     const maxDate = new Date(data[data.length-1].fecha);
-    const quarters = ['Enero/Febrero/Marzo', 'Abril/Mayo/Junio', 'Julio/Agosto/Sepiembre', 'Octubre/Noviembre/Diciembre'];
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     const options = [];
 
+    const periods: string[] = [];
+    if (offset < 12) {
+      let quart: string = "";
+      for (let index = 1; index <= 12; index++) {
+        quart = quart.concat('/', meses[index-1]);
+        if (index % offset === 0) {
+          quart = quart.substring(1);
+          periods.push(quart);
+          quart = "";
+        }
+      }
+    } else {
+      periods.push(''); //yearly
+    }
+    
+
     for (let pastYear = minDate.getFullYear(); pastYear < maxDate.getFullYear(); pastYear++) {
-      quarters.forEach((q,index) => {
-        const yes = data.find(e => parseInt((new Date(e.fecha).getMonth() / 3).toString()) === index && new Date(e.fecha).getFullYear() === pastYear);
+      periods.forEach((q,index) => {
+        const yes = data.find(e => parseInt((new Date(e.fecha).getMonth() / offset).toString()) === index && new Date(e.fecha).getFullYear() === pastYear);
         if(yes) {
           options.push({
             text: q + ' ' + pastYear,
@@ -151,7 +184,7 @@ export class AccountingService {
       });
     }
 
-    quarters.slice(0, parseInt((maxDate.getMonth() / 3 + 1).toString())).forEach((q, index) => options.push({
+    periods.slice(0, parseInt((maxDate.getMonth() / offset + 1).toString())).forEach((q, index) => options.push({
       text: q + ' ' + maxDate.getFullYear(),
       quarter: index+1,
       year: maxDate.getFullYear()

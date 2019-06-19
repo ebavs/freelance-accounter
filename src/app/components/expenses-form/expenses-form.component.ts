@@ -44,7 +44,7 @@ export class ExpensesFormComponent implements OnInit {
       gPara: [0],
     });
 
-    this.clientes = this.accountService.clientes;
+    this.clientes = this.accountService.getClientes();
   }
 
   onSubmit() {
@@ -71,7 +71,7 @@ export class ExpensesFormComponent implements OnInit {
       facturaPara: this.expensesForm.value.gPara === "" ? this.workers[this.expensesForm.value.gPara] : this.workers[0]
     }
     g.importeIVA = Math.round(g.importeIVA * 100) / 100;
-    g.importeFactura = +g.importe + g.importeIVA;
+    g.importeFactura = Math.round((+g.importe + g.importeIVA) * 100) / 100 ;
 
     this.accountService.addGasto(g);
     this.expensesForm.reset();
