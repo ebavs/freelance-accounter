@@ -39,7 +39,7 @@ export class AuthService {
   readKey() {
     const tempKey = sessionStorage.getItem('poison');
     if (tempKey !== null) {
-      return new Uint8Array(JSON.parse(tempKey));
+      return new Uint8Array(Object.values(JSON.parse(tempKey)));
     }
     return null;
   }

@@ -21,7 +21,7 @@ export class AccountingService {
       this.authService.keyObservable.subscribe(() => {
         this.init();
       });
-      console.log(this.authService.secretKey, this.facturas.length, this.authService.readKey() !== null);
+
       if (this.authService.readKey() !== null && this.facturas.length === 0) {
         this.init();
       }

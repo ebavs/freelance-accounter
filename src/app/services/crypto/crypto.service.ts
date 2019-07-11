@@ -53,7 +53,6 @@ export class CryptoService {
   }
 
   isEncrypted(json: any): boolean {
-    console.log(json, json.constructor);
     return json !== undefined && json !== null && json.constructor !== Object;
   }
 
