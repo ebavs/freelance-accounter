@@ -1,0 +1,14 @@
+<div class="columns is-centered is-vcentered">
+  <div class="column is-one-quarter">
+    <form [formGroup]="helloForm" (ngSubmit)="onSubmit()">
+      <div class="field hello">
+        <label class="label">Acceso:</label>
+        <div class="control">
+          <input class="input" type="password" formControlName="passKey">
+        </div>
+        <p *ngIf="submitted && helloForm.controls.passKey.errors && helloForm.controls.passKey.errors.required" class="help is-danger">Campo obligatorio</p>
+        <p *ngIf="submitted && helloForm.controls.passKey.errors && helloForm.controls.passKey.errors.pattern" class="help is-danger">Caracteres extraños no permitidos</p>
+      </div>
+    </form>
+  </div>
+</div>

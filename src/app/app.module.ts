@@ -12,6 +12,7 @@ import { AlertComponent } from './services/modal/alert/alert.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ExpensesFormComponent } from './components/expenses-form/expenses-form.component';
+import { HelloComponent } from './components/hello/hello.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ExpensesFormComponent } from './components/expenses-form/expenses-form.
     AlertComponent,
     MenuComponent,
     UploadComponent,
-    ExpensesFormComponent
+    ExpensesFormComponent,
+    HelloComponent
   ],
   imports: [
     BrowserModule,

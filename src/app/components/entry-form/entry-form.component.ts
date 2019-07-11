@@ -23,8 +23,8 @@ export class EntryFormComponent implements OnInit {
   ivas: any;
   workers: Worker[] = [];
 
-  constructor( 
-    private accountService : AccountingService,
+  constructor(
+    private accountService: AccountingService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
@@ -58,15 +58,15 @@ export class EntryFormComponent implements OnInit {
 
   onSubmit() {
     const cliente = this.validateClientes();
-    
+
     this.submitted = true;
     if (this.entryForm.invalid) {
         return;
     }
-    
+
     const f: Factura = {
       id: null,
-      cliente: cliente,
+      cliente,
       numero: this.entryForm.value.fNumero,
       concepto: this.entryForm.value.fConcepto,
       fecha: this.entryForm.value.fFecha,
@@ -85,7 +85,7 @@ export class EntryFormComponent implements OnInit {
     if (this.entryForm.value.fInternacional) {
       f.importeIRPF = 0;
       f.importeIVA = 0;
-      f.iva = 0;  
+      f.iva = 0;
     } else {
       f.importeIRPF = Math.round(f.importeIRPF * 100) / 100;
       f.importeIVA = Math.round(f.importeIVA * 100) / 100;
@@ -99,7 +99,7 @@ export class EntryFormComponent implements OnInit {
 
   private validateClientes() {
     let cliente: Cliente;
-    
+
     if (!this.isSelectVisible && this.entryForm.value.fCliente !== "") {
       cliente = this.accountService.addCliente({id: null, name: this.entryForm.value.fCliente});
     } else if(this.isSelectVisible && (this.entryForm.value.fClientes !== "none" && this.entryForm.value.fClientes !== "")) {

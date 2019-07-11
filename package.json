@@ -24,6 +24,8 @@
     "rxjs": "~6.5.2",
     "store": "^2.0.12",
     "tslib": "^1.10.0",
+    "tweetnacl": "^1.0.1",
+    "tweetnacl-util": "^0.15.0",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {

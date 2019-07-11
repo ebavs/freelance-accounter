@@ -31,7 +31,7 @@ export class UploadComponent implements OnInit {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       const data: string = fileReader.result.toString();
-      this.accountingService.setAllData(JSON.parse(data));
+      this.accountingService.setAllData(JSON.parse(data), true);
       this.router.navigate(['/']);
     }
     fileReader.readAsText(this.fileToUpload);
