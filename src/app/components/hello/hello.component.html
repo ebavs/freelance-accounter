@@ -1,5 +1,9 @@
 <div class="columns is-centered is-vcentered">
   <div class="column is-one-quarter">
+      <div class="notification is-danger" *ngIf="!correctKey">
+          <button class="delete" (click)="removeNotification()"></button>
+          La clave es incorrecta
+        </div>
     <form [formGroup]="helloForm" (ngSubmit)="onSubmit()">
       <div class="field hello">
         <label class="label">Acceso:</label>

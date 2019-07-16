@@ -222,7 +222,7 @@ export class AccountingService {
       });
     }
 
-    periods.slice(0, parseInt((maxDate.getMonth() / offset + 1).toString())).forEach((q, index) => options.push({
+    periods.slice(0, parseInt((maxDate.getMonth() / offset + 1).toString(), 10)).forEach((q, index) => options.push({
       text: q + ' ' + maxDate.getFullYear(),
       quarter: index+1,
       year: maxDate.getFullYear()

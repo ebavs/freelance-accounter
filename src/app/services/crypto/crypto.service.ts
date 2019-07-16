@@ -18,6 +18,18 @@ export class CryptoService {
     return randomBytes(secretbox.nonceLength);
   }
 
+  keyEncode(key) {
+    if (key.length < 20) {
+      key += 'abcdABCD12345';
+    }
+
+    if (key.length < 64) {
+      key = key.padEnd(64, 'Aa0');
+    }
+
+    return decodeBase64(key).slice(0, 32);
+  }
+
   encrypt(json, key) {
     // const keyUint8Array = decodeBase64(key);
 

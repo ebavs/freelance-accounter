@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { decodeBase64 } from 'tweetnacl-util';
 import { Subject } from 'rxjs';
+import { CryptoService } from './crypto/crypto.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +10,12 @@ export class AuthService {
   secretKey: Uint8Array = null;
   keyObservable = new Subject<Uint8Array>();
 
-  constructor() {
+  constructor(private cryptoService: CryptoService) {
     this.secretKey = this.readKey();
   }
 
   setKey(key: string): void {
-    if (key.length < 20) {
-      key += 'abcdABCD12345';
-    }
-
-    if (key.length < 64) {
-      key = key.padEnd(64, 'Aa0');
-    }
-
-    this.secretKey = decodeBase64(key).slice(0, 32);
+    this.secretKey = this.cryptoService.keyEncode(key);
     sessionStorage.setItem('poison', JSON.stringify(this.secretKey.map(x => x)));
     this.keyObservable.next(this.secretKey);
   }
