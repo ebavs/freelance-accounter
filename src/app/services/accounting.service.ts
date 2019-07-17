@@ -18,7 +18,7 @@ export class AccountingService {
   constructor(
     private cryptoService: CryptoService,
     private authService: AuthService) {
-      this.authService.keyObservable.subscribe(() => {
+      this.authService.validated.subscribe(() => {
         this.init();
       });
 
@@ -138,7 +138,7 @@ export class AccountingService {
       facturas: this.facturas,
       clientes: this.clientes,
       gastos: this.gastos,
-    }, this.authService.secretKey);
+    });
 
     store.set('accountingData', encryptedData);
   }
@@ -147,7 +147,7 @@ export class AccountingService {
     const data = store.get('accountingData');
 
     if (data && this.cryptoService.isEncrypted(data)) {
-      return this.cryptoService.decrypt(data, this.authService.secretKey);
+      return this.cryptoService.decrypt(data);
     } else if (data && !this.cryptoService.isEncrypted(data)) {
       return data;
     }

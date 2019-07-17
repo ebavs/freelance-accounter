@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountingService } from 'src/app/services/accounting.service';
+import { CryptoService } from 'src/app/services/crypto/crypto.service';
 
 @Component({
   selector: 'nav-menu',
@@ -11,27 +12,40 @@ export class MenuComponent implements OnInit {
     element: {
       dynamicDownload: null as HTMLElement
     }
-  }
+  };
 
-  constructor(private accountingService: AccountingService) { }
+  constructor(
+    private accountingService: AccountingService,
+    private cryptoService: CryptoService,
+  ) { }
 
   ngOnInit() {
   }
 
   downloadJson() {
+    this.download('json');
+  }
+
+  downloadEncrypt() {
+    this.download('plain');
+  }
+
+  private download(type: string) {
     if (!this.setting.element.dynamicDownload) {
       this.setting.element.dynamicDownload = document.createElement('a');
     }
-    const data = JSON.stringify(this.accountingService.readStore());
+    let data = JSON.stringify(this.accountingService.readStore());
+    if (type !== 'json') {
+      data = this.cryptoService.encrypt(data);
+    }
     const element = this.setting.element.dynamicDownload;
-    const fileType = 'text/json';
+    const fileType = 'text/' + type;
     element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(data)}`);
-    element.setAttribute('download', 'freelanceAccounting.json');
+    element.setAttribute('download', 'freelanceAccounting.' + type);
 
-    var event = new MouseEvent("click");
+    const event = new MouseEvent('click');
     element.dispatchEvent(event);
   }
-
   // reference : https://stackoverflow.com/a/51806624/7291379
   // author : UnluckyAj
   //  private dyanmicDownloadByBlob(arg: {

@@ -11,6 +11,7 @@ export class AppComponent {
   validated: boolean = false;
 
   constructor(private authService: AuthService) {
-    this.validated = authService.isAuth();
+    this.authService.validated.subscribe(x => this.validated = x);
+
   }
 }

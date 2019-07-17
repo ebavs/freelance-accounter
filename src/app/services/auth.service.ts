@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { CryptoService } from './crypto/crypto.service';
 
 @Injectable({
@@ -7,25 +7,26 @@ import { CryptoService } from './crypto/crypto.service';
 })
 export class AuthService {
 
-  secretKey: Uint8Array = null;
-  keyObservable = new Subject<Uint8Array>();
+  // secretKey: Uint8Array = null;
+  // keyObservable = new Subject<Uint8Array>();
+  private validatedSubject: BehaviorSubject<boolean>;
+  validated: Observable<boolean>;
 
   constructor(private cryptoService: CryptoService) {
-    this.secretKey = this.readKey();
+    const keyIsOk = this.cryptoService.setKey(this.readKey());
+    this.validatedSubject = new BehaviorSubject<boolean>(keyIsOk);
+    this.validated = this.validatedSubject.asObservable();
   }
 
   setKey(key: string): void {
-    this.secretKey = this.cryptoService.keyEncode(key);
-    sessionStorage.setItem('poison', JSON.stringify(this.secretKey.map(x => x)));
-    this.keyObservable.next(this.secretKey);
-  }
-
-  isValidKey(): boolean {
-    return this.secretKey !== null;
+    const secretKey = this.cryptoService.keyEncode(key);
+    sessionStorage.setItem('poison', JSON.stringify(secretKey.map(x => x)));
+    this.cryptoService.setKey(secretKey);
+    this.validatedSubject.next(true);
   }
 
   isAuth(): boolean {
-    return this.isValidKey();
+    return this.cryptoService.isSetKey();
   }
 
   readKey() {

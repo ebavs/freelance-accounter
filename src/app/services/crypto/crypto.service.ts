@@ -11,6 +11,7 @@ import {
   providedIn: 'root'
 })
 export class CryptoService {
+  private key: Uint8Array = null;
 
   constructor() { }
 
@@ -30,12 +31,20 @@ export class CryptoService {
     return decodeBase64(key).slice(0, 32);
   }
 
-  encrypt(json, key) {
-    // const keyUint8Array = decodeBase64(key);
+  setKey(key) {
+    this.key = key;
 
+    return (key != null); // && typeof key === 'UInt8Array'
+  }
+
+  isSetKey() {
+    return this.key != null;
+  }
+
+  encrypt(json) {
     const nonce = this.nonce();
     const messageUint8 = decodeUTF8(JSON.stringify(json));
-    const box = secretbox(messageUint8, nonce, key);
+    const box = secretbox(messageUint8, nonce, this.key);
 
     const fullMessage = new Uint8Array(nonce.length + box.length);
     fullMessage.set(nonce);
@@ -45,8 +54,7 @@ export class CryptoService {
     return base64FullMessage;
   }
 
-  decrypt(messageWithNonce, key) {
-    // const keyUint8Array = decodeBase64(key);
+  decrypt(messageWithNonce) {
     const messageWithNonceAsUint8Array = decodeBase64(messageWithNonce);
     const nonce = messageWithNonceAsUint8Array.slice(0, secretbox.nonceLength);
     const message = messageWithNonceAsUint8Array.slice(
@@ -54,7 +62,7 @@ export class CryptoService {
       messageWithNonce.length
     );
 
-    const decrypted = secretbox.open(message, nonce, key);
+    const decrypted = secretbox.open(message, nonce, this.key);
 
     if (!decrypted) {
       throw new Error('Could not decrypt message');
@@ -68,4 +76,12 @@ export class CryptoService {
     return json !== undefined && json !== null && json.constructor !== Object;
   }
 
+  tryToDecrypt(data, key) {
+    const tempKey = this.key;
+    this.key = key;
+    const canDecrypt = this.decrypt(data);
+    this.key = tempKey;
+
+    return canDecrypt;
+  }
 }

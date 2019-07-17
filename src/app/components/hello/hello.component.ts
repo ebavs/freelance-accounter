@@ -49,7 +49,7 @@ export class HelloComponent implements OnInit {
     try {
       const data = store.get('accountingData');
       const key = this.cryptoService.keyEncode(this.helloForm.value.passKey);
-      const msg = this.cryptoService.decrypt(data, key);
+      const msg = this.cryptoService.tryToDecrypt(data, key);
     } catch (error) {
       this.correctKey = false;
       return;
