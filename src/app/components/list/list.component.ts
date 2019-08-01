@@ -29,13 +29,14 @@ export class ListComponent implements OnInit {
     tIva: number,
     tIrpf: number,
     tTotal: number,
-  }
-  constructor(private accountingService: AccountingService, private modalService: ModalService) { 
+  };
+
+  constructor(private accountingService: AccountingService, private modalService: ModalService) {
     this.periods = this.accountingService.calculateGroups(3);
   }
 
   ngOnInit() {
-    this.periodIndex = this.periods.length-1;
+    this.periodIndex = this.periods.length - 1;
     this.periodActual = this.periods[this.periodIndex];
     this.viewSelected = 3;
     this.refreshData();
@@ -50,7 +51,7 @@ export class ListComponent implements OnInit {
       this.refreshData();
     });
   }
-  
+
   removeGasto(gasto) {
     this.modalService.confirm({
       title: 'Borrar Gasto', 
@@ -90,17 +91,17 @@ export class ListComponent implements OnInit {
 
     this.facturas.forEach(f => {
       this.totales.fBase += +f.importe;
-      this.totales.fIva += +f.importeIVA;  
+      this.totales.fIva += +f.importeIVA;
       this.totales.fIrpf += +f.importeIRPF;
       this.totales.fTotal += +f.importeFactura;
     });
-    
+
     this.gastos.forEach(g => {
       this.totales.gBase += +g.importe;
-      this.totales.gIva += +g.importeIVA;  
+      this.totales.gIva += +g.importeIVA;
       this.totales.gTotal += +g.importeFactura;
     });
-    
+
     this.totales.tBase = Math.round((+this.totales.fBase - +this.totales.gBase) * 100) / 100;
     this.totales.tIva = Math.round((this.totales.fIva - this.totales.gIva) * 100) / 100;
     this.totales.tIrpf = Math.round(this.totales.fIrpf * 100) / 100;
@@ -113,7 +114,7 @@ export class ListComponent implements OnInit {
 
     this.totales.gBase = Math.round(this.totales.gBase * 100) / 100;
     this.totales.gIva = Math.round(this.totales.gIva * 100) / 100;
-    this.totales.gTotal = Math.round(this.totales.gTotal * 100) / 100;    
+    this.totales.gTotal = Math.round(this.totales.gTotal * 100) / 100;
   }
 
   quarterChange(i) {
@@ -139,9 +140,9 @@ export class ListComponent implements OnInit {
     } else {
       this.periodActual = {
         text: ''
-      }
+      };
     }
-    
+
     this.refreshData();
   }
 }

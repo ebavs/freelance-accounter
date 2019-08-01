@@ -13,6 +13,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ExpensesFormComponent } from './components/expenses-form/expenses-form.component';
 import { HelloComponent } from './components/hello/hello.component';
+import { ConfigComponent } from './components/config/config.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { HelloComponent } from './components/hello/hello.component';
     MenuComponent,
     UploadComponent,
     ExpensesFormComponent,
-    HelloComponent
+    HelloComponent,
+    ConfigComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Factura } from '../../types/factura';
 import { AccountingService } from '../../services/accounting.service';
 import { Router } from '@angular/router';
@@ -14,12 +14,12 @@ import { Worker } from 'src/app/types/worker';
   styleUrls: ['./entry-form.component.scss']
 })
 export class EntryFormComponent implements OnInit {
-  
+
   entryForm: FormGroup;
-  submitted: Boolean = false;
-  intChecked: Boolean = false;
+  submitted: boolean = false;
+  intChecked: boolean = false;
   clientes: Cliente[];
-  isSelectVisible: Boolean = true;
+  isSelectVisible: boolean = true;
   ivas: any;
   workers: Worker[] = [];
 
@@ -28,7 +28,7 @@ export class EntryFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router
   ) {
-    this.ivas = ivas.reverse();
+    this.ivas = ivas.sort((a, b) => b - a);
     this.workers = Workers;
   }
 
@@ -78,9 +78,9 @@ export class EntryFormComponent implements OnInit {
       importeIVA: this.entryForm.value.fIva > 0 ? (this.entryForm.value.fImporte * this.entryForm.value.fIva) / 100 : 0,
       importeFactura: 0,
       facturadoPor: this.workers[this.entryForm.value.fPor],
-      facturadoPara: this.entryForm.value.fPara === "" ? this.workers[this.entryForm.value.fPor] : this.workers[this.entryForm.value.fPara],
+      facturadoPara: this.entryForm.value.fPara === '' ? this.workers[this.entryForm.value.fPor] : this.workers[this.entryForm.value.fPara],
       internacional: this.entryForm.value.fInternacional,
-    }
+    };
 
     if (this.entryForm.value.fInternacional) {
       f.importeIRPF = 0;
@@ -100,9 +100,9 @@ export class EntryFormComponent implements OnInit {
   private validateClientes() {
     let cliente: Cliente;
 
-    if (!this.isSelectVisible && this.entryForm.value.fCliente !== "") {
+    if (!this.isSelectVisible && this.entryForm.value.fCliente !== '') {
       cliente = this.accountService.addCliente({id: null, name: this.entryForm.value.fCliente});
-    } else if(this.isSelectVisible && (this.entryForm.value.fClientes !== "none" && this.entryForm.value.fClientes !== "")) {
+    } else if (this.isSelectVisible && (this.entryForm.value.fClientes !== 'none' && this.entryForm.value.fClientes !== '')) {
       cliente = this.clientes[this.entryForm.value.fClientes];
     } else if (!this.isSelectVisible){
       this.entryForm.get('fCliente').setErrors({Required: true});
@@ -117,10 +117,10 @@ export class EntryFormComponent implements OnInit {
     this.intChecked = !this.intChecked;
 
     if (this.intChecked === true) {
-      this.entryForm.controls['fIva'].disable();
-      this.entryForm.controls['fIva'].setValue(0);
+      this.entryForm.controls.fIva.disable();
+      this.entryForm.controls.fIva.setValue(0);
     } else {
-      this.entryForm.controls['fIva'].enable();
+      this.entryForm.controls.fIva.enable();
     }
   }
 }

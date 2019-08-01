@@ -5,19 +5,23 @@ import { Cliente } from '../types/cliente';
 import { Gasto } from '../types/gasto';
 import { CryptoService } from './crypto/crypto.service';
 import { AuthService } from './auth.service';
+import { StorageService } from './storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountingService {
+export class AccountingService extends StorageService {
   facturas: Factura[] = [];
   clientes: Cliente[] = [];
   gastos: Gasto[] = [];
   groups: any;
 
   constructor(
-    private cryptoService: CryptoService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    protected cryptoService: CryptoService
+    ) {
+      super(cryptoService);
+
       this.authService.validated.subscribe(() => {
         this.init();
       });
@@ -38,7 +42,9 @@ export class AccountingService {
     }
 
     this.facturas.push(factura);
-    this.persist();
+    this.persist({
+      facturas: this.facturas
+    });
   }
 
   getFacturas(): Factura[] {
@@ -62,18 +68,21 @@ export class AccountingService {
   removeFactura(id) {
     const index = this.facturas.findIndex(f => f.id === id);
     this.facturas.splice(index, 1);
-    console.log(this.facturas);
 
-    this.persist();
+    this.persist({
+      facturas: this.facturas
+    });
   }
 
-  addGasto(gasto : Gasto) {
+  addGasto(gasto: Gasto) {
     if (gasto.id === null) {
       gasto.id = this.calculateId(this.gastos);
     }
 
     this.gastos.push(gasto);
-    this.persist();
+    this.persist({
+      gastos: this.gastos
+    });
   }
 
   getGastos(): Gasto[] {
@@ -98,7 +107,9 @@ export class AccountingService {
   removeGasto(id) {
     const index = this.gastos.findIndex(g => g.id === id);
     this.gastos.splice(index, 1);
-    this.persist();
+    this.persist({
+      gastos: this.gastos
+    });
   }
 
   addCliente(cliente: Cliente) {
@@ -133,7 +144,7 @@ export class AccountingService {
     return Math.max(...data.map(o => o.id), 0) + 1;
   }
 
-  private persist() {
+  /* private persist() {
     const encryptedData = this.cryptoService.encrypt({
       facturas: this.facturas,
       clientes: this.clientes,
@@ -152,7 +163,7 @@ export class AccountingService {
       return data;
     }
     return {};
-  }
+  } */
 
   setAllData(data, persist: boolean = false) {
     if (data) {
@@ -169,7 +180,11 @@ export class AccountingService {
       }
 
       if (persist) {
-        this.persist();
+        this.persist({
+          facturas: this.facturas,
+          clientes: this.clientes,
+          gastos: this.gastos,
+        });
       }
     }
   }

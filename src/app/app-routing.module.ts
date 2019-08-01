@@ -6,6 +6,7 @@ import { UploadComponent } from './components/upload/upload.component';
 import { ExpensesFormComponent } from './components/expenses-form/expenses-form.component';
 import { HelloComponent } from './components/hello/hello.component';
 import { AuthGuard } from './auth.guard';
+import { ConfigComponent } from './components/config/config.component';
 
 const routes: Routes = [
   { path: '', component: ListComponent, canActivate: [AuthGuard] },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'expense/new', component: ExpensesFormComponent, canActivate: [AuthGuard] },
   { path: 'expense/:id', component: ExpensesFormComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
+  { path: 'config', component: ConfigComponent, canActivate: [AuthGuard] },
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];
