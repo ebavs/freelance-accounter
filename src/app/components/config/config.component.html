@@ -1,0 +1,83 @@
+<div class="box">
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
+      <label class="label">
+        Participantes
+        <span class="icon has-text-info">
+            <i class="fas fa-info-circle"></i>
+        </span>
+      </label>
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <input class="input" type="text" placeholder="Nombre Participante" [(ngModel)]="participant" name="participant">
+        </div>
+        <div class="control">
+          <a class="button is-link" (click)="addParticipant()">
+            <span class="icon">
+                <i class="fas fa-plus"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+      
+      <nav class="panel" *ngIf="participants.length > 0">
+        <div class="panel-block" *ngFor="let p of participants; let i = index;">
+          <span class="is-pulled-left">{{p.name}}</span>
+          <a class="delete is-pulled-right has-text-right" (click)="removeParticipant(i)"></a>
+        </div>
+      </nav>
+      
+      <label class="label">IVAs</label>
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <input class="input" type="text" placeholder="IVA" [(ngModel)]="iva" name="iva">
+          <p *ngIf="ivaError.numero" class="help is-danger">Solo números</p>
+          <p *ngIf="ivaError.repetido" class="help is-danger">Este iva ya existe</p>
+        </div>
+        <div class="control">
+            <a class="button is-link" (click)="addIva()">
+              <span class="icon">
+                  <i class="fas fa-plus"></i>
+              </span>
+            </a>
+        </div>
+      </div>
+      
+      <nav class="panel" *ngIf="ivas.length > 0">
+        <div class="panel-block" *ngFor="let i of ivas; let i = index;">
+          <span class="is-pulled-left">{{i}} %</span>
+          <a class="delete is-pulled-right has-text-right" (click)="removeIva(i)"></a>
+        </div>
+      </nav>
+
+      <label class="label">Desviación Banco</label>
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <input class="input" type="date" placeholder="fecha" [(ngModel)]="banco.fecha" name="fecha">
+          <p *ngIf="bancoError.fecha" class="help is-danger">No ha introducido fecha</p>
+        </div>
+        <div class="control is-expanded">
+          <input class="input" type="text" placeholder="monto" [(ngModel)]="banco.monto" name="balance">
+          <p *ngIf="bancoError.numero" class="help is-danger">Solo números</p>
+        </div>
+        <div class="control">
+            <a class="button is-link" (click)="addMonto()">
+              <span class="icon">
+                  <i class="fas fa-plus"></i>
+              </span>
+            </a>
+        </div>
+      </div>
+      
+      <nav class="panel" *ngIf="bancos.length > 0">
+        <div class="panel-block" *ngFor="let b of bancos; let i = index;">
+          <span class="is-pulled-left">{{b.fecha}}</span>
+          <span class="is-pulled-left">{{b.monto}}€</span>
+          <a class="delete is-pulled-right has-text-right" (click)="removeMonto(i)"></a>
+        </div>
+      </nav>
+
+      <div class="control">
+          <button class="button is-primary">Enviar</button>
+        </div>
+      </form>
+  </div>

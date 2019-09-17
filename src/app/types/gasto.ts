@@ -10,7 +10,7 @@ export class Gasto {
     importe: number;
     iva: number;
     notas: string;
-    recurrente: Boolean;
+    recurrente: boolean;
     recurrenteHasta: Date;
     importeFactura: number;
     importeIVA: number;
